@@ -22,9 +22,29 @@
 	cal.set(y ,m, 1);
 	// 출력 년월의 1일날의 요일
 	int dayOfweek = cal.get(Calendar.DAY_OF_WEEK); // 2, (일:1 ~ 토:7)
+	// dayOfweek = 2;
 	
 	// 출력 년월의 마지막 날짜
 	int lastday = cal.getActualMaximum(Calendar.DATE);
+	// lastday = 31;
+	
+	// 이전버튼
+	int b_y = y;
+	int b_m = m;
+	
+	if(m == 0) {
+		b_y = b_y -1;
+		b_m = 12;
+	} 
+	
+	// 다음버튼
+	int n_y = y;
+	int n_m = m+2;
+	
+	if(m == 11) {
+		n_y = n_y +1;
+		n_m = 1;
+	}
 %>
 
 <!DOCTYPE html>
@@ -67,7 +87,11 @@
 	
 
 	<table>
-		<caption><%=y %>년 <%=m+1 %>월</caption>
+		<caption>
+			<button type="button" onclick="location='cal1.jsp?year=<%=b_y %>&month=<%=b_m %>'" >이전</button> &nbsp;&nbsp;
+				<%=y %>년 <%=m+1 %>월 &nbsp;&nbsp;
+			<button type="button" onclick="location='cal1.jsp?year=<%=n_y %>&month=<%=n_m %>'" >다음</button> 
+		</caption>
 		<tr>
 			<th>일</th>
 			<th>월</th>
@@ -91,14 +115,26 @@
 				// 날자 출력하는 설정
 				for( int d=1; d<=lastday; d++ ) {
 					count++;
+					String color="#555";
+					if(count == 7) {
+						color = "blue";
+					} else if (count == 1) {
+						color = "red";
+					}
 			%>
-				<td><%=d %></td>
+				<td style="color:<%=color %>"><%=d %></td>
 			<%
 					// 개행을 위한 설정
 					if( count == 7 ) {
 						out.print("</tr><tr>");
 						count = 0; // 변수 초기화
 					}
+				}
+				
+				// 4, 5, 6, 
+				while( count < 7 ) {
+					out.print("<td></td>");
+					count++;
 				}
 			%>
 		</tr>
