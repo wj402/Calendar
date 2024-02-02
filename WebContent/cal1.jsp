@@ -3,15 +3,28 @@
 <%@ page import="java.util.Calendar" %>
 
 <%
+	String yy = request.getParameter("year");
+	String mm = request.getParameter("month");
+
 	Calendar cal = Calendar.getInstance();
-	//int y = cal.get(Calendar.YEAR); // 출력 년도
-	//int m = cal.get(Calendar.MONTH); // 출력 개월(출력시 +1 필요)
-	int y = 2023;
-	int m = 11;
+	
+	// 현재상태
+	int y = cal.get(Calendar.YEAR); // 출력 년도
+	int m = cal.get(Calendar.MONTH); // 출력 개월(출력시 +1 필요)
+	//int y = 2023;
+	//int m = 11;
+	
+	if( yy != null && mm != null && !yy.equals("") && !mm.equals("")) { // null이 아니어야되고 공백도 아니여야 될경우
+		y = Integer.parseInt(yy);
+		m = Integer.parseInt(mm)-1;
+	}
 	
 	cal.set(y ,m, 1);
-	int dayOfweek = cal.get(Calendar.DAY_OF_WEEK); // 2, (1 ~ 7) 1일날의 요일
-	int lastday = cal.getActualMaximum(Calendar.DATE); // 마지막 날짜
+	// 출력 년월의 1일날의 요일
+	int dayOfweek = cal.get(Calendar.DAY_OF_WEEK); // 2, (일:1 ~ 토:7)
+	
+	// 출력 년월의 마지막 날짜
+	int lastday = cal.getActualMaximum(Calendar.DATE);
 %>
 
 <!DOCTYPE html>
@@ -44,6 +57,15 @@
 
 <body>
 
+	<form name="frm" method="post" action="cal1.jsp">
+		<input type="text" name="year" size="3">년 &nbsp;
+		<input type="text" name="month" size="3">월 &nbsp;
+		<input type="submit" value="달력보기"> &nbsp;
+	</form>
+	
+	<br><br>
+	
+
 	<table>
 		<caption><%=y %>년 <%=m+1 %>월</caption>
 		<tr>
@@ -72,8 +94,10 @@
 			%>
 				<td><%=d %></td>
 			<%
-					if( count%7 == 0 ) {
+					// 개행을 위한 설정
+					if( count == 7 ) {
 						out.print("</tr><tr>");
+						count = 0; // 변수 초기화
 					}
 				}
 			%>
