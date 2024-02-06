@@ -8,6 +8,8 @@
 
 	Calendar cal = Calendar.getInstance();
 	
+	int h_y = cal.get(Calendar.YEAR);
+
 	// 현재상태
 	int y = cal.get(Calendar.YEAR); // 출력 년도
 	int m = cal.get(Calendar.MONTH); // 출력 개월(출력시 +1 필요)
@@ -32,6 +34,7 @@
 	int b_y = y;
 	int b_m = m;
 	
+	// if( b_m == 0 )
 	if(m == 0) {
 		b_y = b_y -1;
 		b_m = 12;
@@ -41,6 +44,7 @@
 	int n_y = y;
 	int n_m = m+2;
 	
+	// if( n_m == 13 )
 	if(m == 11) {
 		n_y = n_y +1;
 		n_m = 1;
@@ -77,10 +81,45 @@
 
 <body>
 
-	<form name="frm" method="post" action="cal1.jsp">
-		<input type="text" name="year" size="3">년 &nbsp;
-		<input type="text" name="month" size="3">월 &nbsp;
-		<input type="submit" value="달력보기"> &nbsp;
+	<form name="frm" method="post" action="cal2.jsp">
+		<select name="year">
+			<%
+				for(int y1=(h_y-20); y1<=(h_y+20); y1++) {
+					
+					String chk1 = "";
+					try {
+						if( y1 == Integer.parseInt(yy) ) {
+							chk1 = "selected";
+						}
+					} catch(NumberFormatException e) {
+					}
+			%>
+			<option value="<%=y1 %>" <%=chk1 %> > <%=y1 %>년 </option> 
+			<%
+				}
+			%>
+		</select>
+		
+		<select>
+			<%
+				for( int m1=1; m1<=12; m1++ ) {	
+					
+					String chk2 = "";
+					try {
+						if( m1 == Integer.parseInt(mm) ) {
+							chk2 = "selected";
+						}
+					} catch(NumberFormatException e) {
+						
+					}
+					
+			%>
+			<option value="<%=m1 %>" <%=chk2 %>> <%=m1 %>월 </option> 
+			<%
+				}
+			%>
+		</select>
+		<input type="submit" value="달력보기">
 	</form>
 	
 	<br><br>
@@ -88,9 +127,9 @@
 
 	<table>
 		<caption>
-			<button type="button" onclick="location='cal1.jsp?year=<%=b_y %>&month=<%=b_m %>'" >이전</button> &nbsp;&nbsp;
+			<button type="button" onclick="location='cal2.jsp?year=<%=b_y %>&month=<%=b_m %>'" >이전</button> &nbsp;&nbsp;
 				<%=y %>년 <%=m+1 %>월 &nbsp;&nbsp;
-			<button type="button" onclick="location='cal1.jsp?year=<%=n_y %>&month=<%=n_m %>'" >다음</button> 
+			<button type="button" onclick="location='cal2.jsp?year=<%=n_y %>&month=<%=n_m %>'" >다음</button> 
 		</caption>
 		<tr>
 			<th>일</th>
